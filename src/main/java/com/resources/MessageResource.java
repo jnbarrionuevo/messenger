@@ -3,6 +3,7 @@ package com.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,6 +22,13 @@ public class MessageResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Message> getMessages() {    	
         return ms.getAllMessages();
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Message addMessages(Message m) {    	
+        return ms.addMessage(m);
     }
     
     @GET
