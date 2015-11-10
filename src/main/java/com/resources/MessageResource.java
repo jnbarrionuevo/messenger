@@ -1,5 +1,6 @@
 package com.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -20,8 +21,8 @@ import com.service.MessageService;
 public class MessageResource {
 	
 	MessageService ms = new MessageService();
-	
-    @GET
+    
+	@GET
     public List<Message> getMessages() {    	
         return ms.getAllMessages();
     }
@@ -50,6 +51,4 @@ public class MessageResource {
     public Message getMessage(@PathParam("messageId") Long messageId) {
 		return ms.getMessage(messageId);
     }
-    
-    
 }
