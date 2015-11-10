@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import com.model.Message;
 import com.service.MessageService;
@@ -27,6 +28,11 @@ public class MessageResource {
         return ms.getAllMessages();
     }
     
+	@GET
+    public List<Message> getMessagesByYear(@QueryParam("year")int year) {    	
+        return ms.getMessagesByYear(year);
+    }
+	
     @POST
     public Message addMessages(Message m) {    	
         return ms.addMessage(m);

@@ -15,11 +15,10 @@ public class Message {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Message(long id, String message, String author) {
-		super();
+	public Message(long id, Date date, String message, String author) {
 		this.id = id;
 		this.message = message;
-		//this.created = created;
+		this.created = date;
 		this.author = author;
 	}
 	
@@ -43,15 +42,15 @@ public class Message {
 		return created;
 	}
 
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-
 	public String getAuthor() {
 		return author;
 	}
 
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 }
