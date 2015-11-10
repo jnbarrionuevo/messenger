@@ -1,11 +1,8 @@
 package com.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.database.Database;
 import com.model.Message;
@@ -16,7 +13,7 @@ public class MessageService {
 	
 	public MessageService() {
 		messages.put(1L, new Message(1L, "hello!", "Jorge"));
-		messages.put(2L, new Message(1L, "bye!", "Juan"));
+		messages.put(2L, new Message(2L, "bye!", "Juan"));
 	}
 	
 	public List<Message> getAllMessages(){
@@ -34,6 +31,7 @@ public class MessageService {
 	}
 	
 	public Message updateMessage(Message m){
+		System.out.println("updateMessage id:" + m.getId() + " author: " + m.getAuthor());
 		if(m.getId()<=0){
 			return null;
 		}
