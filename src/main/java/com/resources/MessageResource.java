@@ -3,6 +3,7 @@ package com.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,6 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import com.model.Message;
+import com.resources.beans.MessageFilterBean;
 import com.service.MessageService;
 
 @Path("messageresource")
@@ -24,12 +26,18 @@ public class MessageResource {
 	MessageService ms = new MessageService();
     
 	@GET
-    public List<Message> getMessages(@QueryParam("year")int year, @QueryParam("start")int start, @QueryParam("size")int size) {    	
-        if(year>0){
-        	return getMessagesByYear(year);
+    public List<Message> getMessages(@BeanParam MessageFilterBean filterBean) {  
+		
+		System.out.println("Using Bean: ");
+		System.out.println("			 Year: "+filterBean.getYear());
+		System.out.println("			 Size: "+filterBean.getSize());
+		System.out.println("			 Start: "+filterBean.getStart());
+		
+        if(filterBean.getYear()>0){
+        	return getMessagesByYear(filterBean.getYear());
         }
-        else if(start>0 && size>0){
-        	return getMessagesPaginated(start, size);
+        else if(filterBean.getStart()>0 && filterBean.getSize()>0){
+        	return getMessagesPaginated(filterBean.getStart(), filterBean.getSize());
         }
 		return ms.getAllMessages();
     }
