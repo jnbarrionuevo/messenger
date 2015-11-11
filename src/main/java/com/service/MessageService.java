@@ -1,6 +1,7 @@
 package com.service;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -19,6 +20,7 @@ public class MessageService {
 	}
 	
 	public List<Message> getAllMessages(){
+		System.out.println("0-getAllMessages");
 		return new ArrayList<Message>(messages.values());
 	}
 	
@@ -29,12 +31,29 @@ public class MessageService {
 		for (Message m : messages.values()) {
 			cal.setTime(m.getCreated());
 			if(cal.get(Calendar.YEAR) == year){
-				System.out.println("Year is: " + cal.get(Calendar.YEAR));
+				System.out.println("1-Year is: " + cal.get(Calendar.YEAR));
 				messagesByYear.add(m);
 			}
 		}
-		
+		System.out.println("2-Year is: " + cal.get(Calendar.YEAR));
 		return messagesByYear;
+	}
+	
+	public List<Message> getMessagesPaginated(int start, int size){
+		System.out.println("---Paginated 1");
+		List<Message> messagesPaginated = new ArrayList<>();
+		Iterator<Message> it = messages.values().iterator();
+		int i=1;
+		while (it.hasNext()) {
+			System.out.println("---Paginated 2");
+			Message message = (Message) it.next();
+			if(i>=start && i<=(start + size) && messagesPaginated.size()<size){
+				messagesPaginated.add(message);
+				System.out.println("messagesPaginated.size()=" + messagesPaginated.size() + " --- size = " + size);
+			}
+			i++;
+		}
+		return messagesPaginated;
 	}
 	
 	public Message getMessage(Long id){

@@ -24,15 +24,24 @@ public class MessageResource {
 	MessageService ms = new MessageService();
     
 	@GET
-    public List<Message> getMessages() {    	
-        return ms.getAllMessages();
+    public List<Message> getMessages(@QueryParam("year")int year, @QueryParam("start")int start, @QueryParam("size")int size) {    	
+        if(year>0){
+        	return getMessagesByYear(year);
+        }
+        else if(start>0 && size>0){
+        	return getMessagesPaginated(start, size);
+        }
+		return ms.getAllMessages();
     }
     
-	@GET
-    public List<Message> getMessagesByYear(@QueryParam("year")int year) {    	
+    public List<Message> getMessagesByYear(int year) {    	
         return ms.getMessagesByYear(year);
     }
 	
+    public List<Message> getMessagesPaginated(int start, int size) {    	
+        return ms.getMessagesPaginated(start, size);
+    }
+    
     @POST
     public Message addMessages(Message m) {    	
         return ms.addMessage(m);
