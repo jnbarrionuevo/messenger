@@ -87,8 +87,8 @@ public class MessageResource {
     
     @GET
     @Path("{messageId}")
-    public Message getMessage(@PathParam("messageId") Long messageId) {
-		return ms.getMessage(messageId);
+    public Message getMessage(@PathParam("messageId") Long messageId) {	
+    	return ms.getMessage(messageId);
     }
     
     @Path("{messageId}/comments")
