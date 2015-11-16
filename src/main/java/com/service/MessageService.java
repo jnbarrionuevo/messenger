@@ -7,8 +7,15 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
+
 import com.database.Database;
 import com.exceptions.DataNotFoundException;
+import com.model.ErrorMessage;
 import com.model.Message;
 
 public class MessageService {
@@ -55,7 +62,13 @@ public class MessageService {
 		Message m = messages.get(id);    	
 		if(m == null){
 			System.out.println("------Null message");
-			throw new DataNotFoundException("Message with ID: " + id.toString() + " not found");		
+			//throw new DataNotFoundException("Message with ID: " + id.toString() + " not found");
+			
+			ErrorMessage errorMessage = new ErrorMessage("Not found", 404, "http://javabrains");
+			Response response = Response.status(Status.INTERNAL_SERVER_ERROR).
+							entity(errorMessage).
+							build();
+			throw new WebApplicationException(response);
 		}
 		return m;
 	}
