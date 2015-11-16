@@ -1,6 +1,7 @@
 package com.resources;
 
-import java.util.ArrayList;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ws.rs.BeanParam;
@@ -13,7 +14,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
+
 import com.model.Message;
 import com.resources.beans.MessageFilterBean;
 import com.service.MessageService;
@@ -51,8 +57,18 @@ public class MessageResource {
     }
     
     @POST
-    public Message addMessages(Message m) {    	
-        return ms.addMessage(m);
+    public Response addMessages(Message m, @Context UriInfo uriInfo) {    	
+    	System.out.println("URI info:" + uriInfo.toString());
+    	Message newMessage = ms.addMessage(m);
+    	String newId = String.valueOf(newMessage.getId());
+        URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build();
+        String path = uriInfo.getAbsolutePath().toString();
+    
+        System.out.println("URI:" + uri.toString());
+        
+        return Response.created(uri).
+    			entity(newMessage).
+    			build();   	
     }
     
     @DELETE
