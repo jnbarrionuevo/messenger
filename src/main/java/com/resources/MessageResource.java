@@ -33,7 +33,11 @@ public class MessageResource {
 	MessageService ms = new MessageService();
     
 	@GET
-    public List<Message> getMessages(@BeanParam MessageFilterBean filterBean) {  
+	@Produces(value={MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
+	@Consumes(MediaType.TEXT_XML)
+	public List<Message> getJasonMessages(@BeanParam MessageFilterBean filterBean) {  
+		
+		System.out.println("----getJasonMessages");
 		
 		System.out.println("Using Bean: ");
 		System.out.println("			 Year: "+filterBean.getYear());
@@ -49,6 +53,26 @@ public class MessageResource {
 		return ms.getAllMessages();
     }
     
+	@GET
+	@Produces(MediaType.TEXT_XML)
+    public List<Message> getXmlMessages(@BeanParam MessageFilterBean filterBean) {  
+		
+		System.out.println("----getXmlMessages");
+		
+		System.out.println("Using Bean: ");
+		System.out.println("			 Year: "+filterBean.getYear());
+		System.out.println("			 Size: "+filterBean.getSize());
+		System.out.println("			 Start: "+filterBean.getStart());
+		
+        if(filterBean.getYear()>0){
+        	return getMessagesByYear(filterBean.getYear());
+        }
+        else if(filterBean.getStart()>0 && filterBean.getSize()>0){
+        	return getMessagesPaginated(filterBean.getStart(), filterBean.getSize());
+        }
+		return ms.getAllMessages();
+    }
+	
     public List<Message> getMessagesByYear(int year) {    	
         return ms.getMessagesByYear(year);
     }
