@@ -2,6 +2,7 @@ package com.resources;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.BeanParam;
@@ -20,15 +21,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.model.Link;
 import com.model.Message;
 import com.resources.beans.MessageFilterBean;
 import com.service.MessageService;
 
-@Path("messageresource")
+@Path("messages")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class MessageResource {
-	
 	MessageService ms = new MessageService();
     
 	@GET
@@ -87,13 +88,52 @@ public class MessageResource {
     
     @GET
     @Path("{messageId}")
-    public Message getMessage(@PathParam("messageId") Long messageId) {
-    	System.out.println("1 getMessage");
-    	return ms.getMessage(messageId);
+    public Message getMessage(@PathParam("messageId") Long messageId, @Context UriInfo uriInfo) {
+    	Message m = ms.getMessage(messageId);
+    	String uri = getUriForSelf(uriInfo, m);
+    	String uri1 = getUriForProfile(uriInfo, m);
+    	String uri2 = getUriForComment(uriInfo, m);
+    	
+    	m.addLink(uri, "self");
+    	m.addLink(uri1, "profile");
+    	m.addLink(uri2, "comment");
+    	
+    	
+    	return m;
     }
+    
+	private String getUriForComment(UriInfo uriInfo, Message m) {
+		String uri = uriInfo.getBaseUriBuilder().
+    				path(MessageResource.class).
+    				path(MessageResource.class, "getCommentResource").
+    				path(CommentResource.class).
+    				resolveTemplate("messageId", m.getId()).
+    				build().
+    				toString();
+		return uri;
+	}
+    
+	private String getUriForSelf(UriInfo uriInfo, Message m) {
+		String uri = uriInfo.getBaseUriBuilder().
+    				path(MessageResource.class).
+    				path(Long.toString(m.getId())).
+    				build().
+    				toString();
+		return uri;
+	}
     
     @Path("{messageId}/comments")
     public CommentResource getCommentResource() {
 		return new CommentResource();
     }
+    		
+    private String getUriForProfile(UriInfo uriInfo, Message m) {
+		String uri = uriInfo.getBaseUriBuilder().
+    				path(ProfileResource.class).
+    				path(m.getAuthor()).
+    				build().
+    				toString();
+		return uri;
+	}
+    
 }
