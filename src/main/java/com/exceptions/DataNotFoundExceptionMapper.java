@@ -9,6 +9,7 @@ import com.model.ErrorMessage;
 
 @Provider
 public class DataNotFoundExceptionMapper implements ExceptionMapper<DataNotFoundException>{
+	
 	@Override
 	public Response toResponse(DataNotFoundException exc) {
 		System.out.println("DataNotFoundExceptionMapper.toResponse()");

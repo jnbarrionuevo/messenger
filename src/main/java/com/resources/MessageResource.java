@@ -87,7 +87,8 @@ public class MessageResource {
     
     @GET
     @Path("{messageId}")
-    public Message getMessage(@PathParam("messageId") Long messageId) {	
+    public Message getMessage(@PathParam("messageId") Long messageId) {
+    	System.out.println("1 getMessage");
     	return ms.getMessage(messageId);
     }
     
